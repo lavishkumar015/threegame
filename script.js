@@ -1,76 +1,116 @@
 const items = ["🍎", "🍌", "🍒", "🍇"];
 
-let totalRounds = 0;
-let currentRound = 1;
-let roundPlayed = false;
+// GAME STATE
+let currentMatch = 1;
+let totalMatches = 0;
+let spinCount = 0;
+
+// FIXED WIN MATCHES
+// 1 lose, 2 win, 3 lose, 4 lose, 5 lose,
+// 6 win, 7 lose, 8 lose, 9 lose, 10 win
+const winMatches = [2, 6, 10];
+
+/* ---------- PAGE NAVIGATION ---------- */
 
 function goToPage2() {
   const name = document.getElementById("username").value;
-  if (!name) return alert("Enter name");
+  if (!name) {
+    alert("Please enter your name");
+    return;
+  }
 
   document.getElementById("showName").textContent = name;
   showPage(2);
 }
 
 function startGame() {
-  totalRounds = parseInt(document.getElementById("rounds").value);
-  if (!totalRounds) return alert("Enter rounds");
-
-  currentRound = 1;
-  roundPlayed = false;
-  showPage(3);
-  updateRoundText();
-}
-
-function playGame() {
-  if (roundPlayed) {
-    nextRound();
+  const selected = document.getElementById("rounds").value;
+  if (!selected) {
+    alert("Please select total matches");
     return;
   }
 
-  let win = false;
+  totalMatches = parseInt(selected);
+  currentMatch = 1;
+  spinCount = 0;
 
-  // FIXED ROUND RESULTS
-  if (currentRound === 2 || currentRound === 5) {
-    win = true;
-  }
+  clearItems();
+  document.getElementById("result").textContent = "Tap Play to start";
+  updateMatchText();
 
-  if (win) {
-    const item = getRandomItem();
-    setItems(item, item, item);
-    document.getElementById("result").textContent = "You Win!";
-  } else {
-    let a = getRandomItem();
-    let b = getRandomItem();
-    let c = getRandomItem();
-    while (a === b && b === c) {
-      c = getRandomItem();
-    }
-    setItems(a, b, c);
-    document.getElementById("result").textContent = "You Lose!";
-  }
-
-  roundPlayed = true;
+  showPage(3);
 }
 
-function nextRound() {
-  currentRound++;
+/* ---------- GAME LOGIC ---------- */
 
-  if (currentRound > totalRounds) {
+function playGame() {
+  if (currentMatch > totalMatches) {
     document.getElementById("result").textContent = "Game Over";
     return;
   }
 
-  roundPlayed = false;
-  clearItems();
-  updateRoundText();
-  document.getElementById("result").textContent = "Tap Play for next round";
+  spinCount++;
+
+  const isWinMatch = winMatches.includes(currentMatch);
+  let isWin = false;
+
+  // Win sirf 3rd spin me (agar win match hai)
+  if (isWinMatch && spinCount === 3) {
+    isWin = true;
+  }
+
+  if (isWin) {
+    const winItem = getRandomItem();
+    setItems(winItem, winItem, winItem);
+
+    document.getElementById("result").textContent =
+      `Match ${currentMatch}: YOU WIN`;
+
+    nextMatch();
+    return;
+  }
+
+  // LOSE logic (kabhi accidental win nahi)
+  let a = getRandomItem();
+  let b = getRandomItem();
+  let c = getRandomItem();
+
+  while (a === b && b === c) {
+    c = getRandomItem();
+  }
+
+  setItems(a, b, c);
+
+  document.getElementById("result").textContent =
+    `Match ${currentMatch} - Spin ${spinCount}: YOU LOSE`;
+
+  // 3 spins ke baad match finish
+  if (spinCount === 3) {
+    nextMatch();
+  }
 }
 
-function updateRoundText() {
-  document.getElementById("roundText").textContent =
-    `Round ${currentRound} of ${totalRounds}`;
+/* ---------- MATCH CONTROL ---------- */
+
+function nextMatch() {
+  currentMatch++;
+  spinCount = 0;
+
+  if (currentMatch > totalMatches) {
+    document.getElementById("result").textContent = "Game Finished";
+    return;
+  }
+
+  clearItems();
+  updateMatchText();
 }
+
+function updateMatchText() {
+  document.getElementById("roundText").textContent =
+    `Match ${currentMatch} of ${totalMatches}`;
+}
+
+/* ---------- UI HELPERS ---------- */
 
 function clearItems() {
   document.getElementById("item1").textContent = "?";
@@ -85,8 +125,11 @@ function setItems(a, b, c) {
 }
 
 function getRandomItem() {
-  return items[Math.floor(Math.random() * items.length)];
+  const index = Math.floor(Math.random() * items.length);
+  return items[index];
 }
+
+/* ---------- PAGE SWITCH ---------- */
 
 function showPage(page) {
   document.getElementById("page1").classList.add("hidden");
