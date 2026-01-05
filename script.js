@@ -2,6 +2,7 @@ const items = ["🍎", "🍌", "🍒", "🍇"];
 
 let totalRounds = 0;
 let currentRound = 1;
+let roundPlayed = false;
 
 function goToPage2() {
   const name = document.getElementById("username").value;
@@ -16,14 +17,20 @@ function startGame() {
   if (!totalRounds) return alert("Enter rounds");
 
   currentRound = 1;
+  roundPlayed = false;
   showPage(3);
   updateRoundText();
 }
 
 function playGame() {
+  if (roundPlayed) {
+    nextRound();
+    return;
+  }
+
   let win = false;
 
-  // FIXED LOGIC
+  // FIXED ROUND RESULTS
   if (currentRound === 2 || currentRound === 5) {
     win = true;
   }
@@ -32,7 +39,6 @@ function playGame() {
     const item = getRandomItem();
     setItems(item, item, item);
     document.getElementById("result").textContent = "You Win!";
-    return; // game finish on win
   } else {
     let a = getRandomItem();
     let b = getRandomItem();
@@ -44,6 +50,10 @@ function playGame() {
     document.getElementById("result").textContent = "You Lose!";
   }
 
+  roundPlayed = true;
+}
+
+function nextRound() {
   currentRound++;
 
   if (currentRound > totalRounds) {
@@ -51,12 +61,21 @@ function playGame() {
     return;
   }
 
+  roundPlayed = false;
+  clearItems();
   updateRoundText();
+  document.getElementById("result").textContent = "Tap Play for next round";
 }
 
 function updateRoundText() {
   document.getElementById("roundText").textContent =
     `Round ${currentRound} of ${totalRounds}`;
+}
+
+function clearItems() {
+  document.getElementById("item1").textContent = "?";
+  document.getElementById("item2").textContent = "?";
+  document.getElementById("item3").textContent = "?";
 }
 
 function setItems(a, b, c) {
