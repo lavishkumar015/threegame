@@ -2,7 +2,7 @@ body {
   margin: 0;
   padding: 20px;
   font-family: Arial, sans-serif;
-  background-color: #dbeeff; /* light blue */
+  background-color: #dbeeff;
   text-align: center;
 }
 
@@ -15,7 +15,7 @@ body {
   display: none;
 }
 
-input {
+input, select {
   width: 100%;
   padding: 15px;
   font-size: 18px;
@@ -46,10 +46,3 @@ button {
   background: white;
   border-radius: 10px;
 }
-select {
-  width: 100%;
-  padding: 15px;
-  font-size: 18px;
-  margin: 15px 0;
-}
-
