@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Match 3 Game</title>
+  <title>Match Game</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,24 +15,21 @@
     <button onclick="goToPage2()">Next</button>
   </div>
 
- <!-- PAGE 2 -->
-<div id="page2" class="page hidden">
-  <h1>Hello <span id="showName"></span></h1>
+  <!-- PAGE 2 -->
+  <div id="page2" class="page hidden">
+    <h1>Hello <span id="showName"></span></h1>
 
-  <select id="rounds">
-    <option value="">Select total matches</option>
-    <option value="5">5 Matches</option>
-    <option value="10">10 Matches</option>
-    <option value="15">15 Matches</option>
-  </select>
+    <select id="rounds">
+      <option value="">Select total matches</option>
+      <option value="10">10 Matches</option>
+    </select>
 
-  <button onclick="startGame()">Start Game</button>
-</div>
-
+    <button onclick="startGame()">Start Game</button>
+  </div>
 
   <!-- PAGE 3 -->
   <div id="page3" class="page hidden">
-    <h1 id="roundText"></h1>
+    <h2 id="roundText"></h2>
 
     <div class="game">
       <div class="item" id="item1">?</div>
@@ -47,4 +44,3 @@
 <script src="script.js"></script>
 </body>
 </html>
-
