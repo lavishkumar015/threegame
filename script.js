@@ -1,21 +1,18 @@
 const items = ["🍎", "🍌", "🍒", "🍇"];
 
-// GAME STATE
-let currentMatch = 1;
 let totalMatches = 0;
+let currentMatch = 1;
 let spinCount = 0;
 
-// FIXED WIN MATCHES
+// Win sirf in matches me hoga
 // 1 lose, 2 win, 3 lose, 4 lose, 5 lose,
 // 6 win, 7 lose, 8 lose, 9 lose, 10 win
 const winMatches = [2, 6, 10];
 
-/* ---------- PAGE NAVIGATION ---------- */
-
 function goToPage2() {
   const name = document.getElementById("username").value;
   if (!name) {
-    alert("Please enter your name");
+    alert("Enter name");
     return;
   }
 
@@ -24,24 +21,22 @@ function goToPage2() {
 }
 
 function startGame() {
-  const selected = document.getElementById("rounds").value;
-  if (!selected) {
-    alert("Please select total matches");
+  const value = document.getElementById("rounds").value;
+  if (!value) {
+    alert("Select matches");
     return;
   }
 
-  totalMatches = parseInt(selected);
+  totalMatches = parseInt(value);
   currentMatch = 1;
   spinCount = 0;
 
   clearItems();
-  document.getElementById("result").textContent = "Tap Play to start";
-  updateMatchText();
+  updateText();
+  document.getElementById("result").textContent = "Tap Play";
 
   showPage(3);
 }
-
-/* ---------- GAME LOGIC ---------- */
 
 function playGame() {
   if (currentMatch > totalMatches) {
@@ -51,46 +46,36 @@ function playGame() {
 
   spinCount++;
 
-  const isWinMatch = winMatches.includes(currentMatch);
-  let isWin = false;
+  let win = false;
 
-  // Win sirf 3rd spin me (agar win match hai)
-  if (isWinMatch && spinCount === 3) {
-    isWin = true;
+  if (winMatches.includes(currentMatch) && spinCount === 3) {
+    win = true;
   }
 
-  if (isWin) {
-    const winItem = getRandomItem();
-    setItems(winItem, winItem, winItem);
-
-    document.getElementById("result").textContent =
-      `Match ${currentMatch}: YOU WIN`;
-
+  if (win) {
+    const item = randomItem();
+    setItems(item, item, item);
+    document.getElementById("result").textContent = "YOU WIN";
     nextMatch();
     return;
   }
 
-  // LOSE logic (kabhi accidental win nahi)
-  let a = getRandomItem();
-  let b = getRandomItem();
-  let c = getRandomItem();
+  let a = randomItem();
+  let b = randomItem();
+  let c = randomItem();
 
   while (a === b && b === c) {
-    c = getRandomItem();
+    c = randomItem();
   }
 
   setItems(a, b, c);
-
   document.getElementById("result").textContent =
-    `Match ${currentMatch} - Spin ${spinCount}: YOU LOSE`;
+    `Match ${currentMatch} - Spin ${spinCount}: LOSE`;
 
-  // 3 spins ke baad match finish
   if (spinCount === 3) {
     nextMatch();
   }
 }
-
-/* ---------- MATCH CONTROL ---------- */
 
 function nextMatch() {
   currentMatch++;
@@ -102,20 +87,12 @@ function nextMatch() {
   }
 
   clearItems();
-  updateMatchText();
+  updateText();
 }
 
-function updateMatchText() {
+function updateText() {
   document.getElementById("roundText").textContent =
     `Match ${currentMatch} of ${totalMatches}`;
-}
-
-/* ---------- UI HELPERS ---------- */
-
-function clearItems() {
-  document.getElementById("item1").textContent = "?";
-  document.getElementById("item2").textContent = "?";
-  document.getElementById("item3").textContent = "?";
 }
 
 function setItems(a, b, c) {
@@ -124,17 +101,20 @@ function setItems(a, b, c) {
   document.getElementById("item3").textContent = c;
 }
 
-function getRandomItem() {
-  const index = Math.floor(Math.random() * items.length);
-  return items[index];
+function clearItems() {
+  document.getElementById("item1").textContent = "?";
+  document.getElementById("item2").textContent = "?";
+  document.getElementById("item3").textContent = "?";
 }
 
-/* ---------- PAGE SWITCH ---------- */
+function randomItem() {
+  return items[Math.floor(Math.random() * items.length)];
+}
 
-function showPage(page) {
+function showPage(p) {
   document.getElementById("page1").classList.add("hidden");
   document.getElementById("page2").classList.add("hidden");
   document.getElementById("page3").classList.add("hidden");
 
-  document.getElementById(`page${page}`).classList.remove("hidden");
+  document.getElementById(`page${p}`).classList.remove("hidden");
 }
