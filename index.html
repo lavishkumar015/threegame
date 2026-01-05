@@ -15,12 +15,20 @@
     <button onclick="goToPage2()">Next</button>
   </div>
 
-  <!-- PAGE 2 -->
-  <div id="page2" class="page hidden">
-    <h1>Hello <span id="showName"></span></h1>
-    <input type="number" id="rounds" placeholder="Enter total rounds">
-    <button onclick="startGame()">Start Game</button>
-  </div>
+ <!-- PAGE 2 -->
+<div id="page2" class="page hidden">
+  <h1>Hello <span id="showName"></span></h1>
+
+  <select id="rounds">
+    <option value="">Select total matches</option>
+    <option value="5">5 Matches</option>
+    <option value="10">10 Matches</option>
+    <option value="15">15 Matches</option>
+  </select>
+
+  <button onclick="startGame()">Start Game</button>
+</div>
+
 
   <!-- PAGE 3 -->
   <div id="page3" class="page hidden">
@@ -39,3 +47,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+
